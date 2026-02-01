@@ -7,8 +7,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"strings"
-//	"io"
-	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -21,20 +20,40 @@ Ken,Thompson,ken
 
 // normalizeCmd is the command for normalizing the values of the input file.
 var normalizeCmd = &cobra.Command{
-	Use:   "normalize",
+	Use:   "normalize <arguments>",
 	Short: "Normalize a file with a fixed set of rules",
+	Long: `The normalize command takes a CSV input file and transforms its raw data into a
+clean, predictable format using a fixed set of normalization rules.
+
+Arguments:
+  <file>    Path to the input CSV file to normalize. The file must contain a header row.
+
+The command reads the input file, applies normalization rules to each row, and outputs
+the normalized data in CSV format.`,
+	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		r := csv.NewReader(strings.NewReader(in_string))
+		if len(args) == 0 {
+			fmt.Println("'normalize' command requires a <file> argument. Use the '--help' flag to see the usage")
+		} else {
+			file_path, err := os.Open(args[0])
+			data, err := os.ReadFile(file_path.Name())
+			if err != nil {
+				return err
+			}
 
-		r.Comma = ','
-		r.Comment = '#'
+			reader := strings.NewReader(string(data))
+			csv_reader := csv.NewReader(reader)
 
-		records, err := r.ReadAll()
-		if err != nil {
-			log.Fatal(err)
+			csv_reader.Comma = ','
+			csv_reader.Comment = '#'
+
+			records, err := csv_reader.ReadAll()
+			if err != nil {
+				return err
+			}
+
+			fmt.Println(records)		
 		}
-
-		fmt.Println(records)
 
 		return nil
 	},
