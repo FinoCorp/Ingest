@@ -1,17 +1,18 @@
 # Ingest-CLI
-cli application to turn messy input into a known, validated shape.
+_cli application to turn messy input into a known, validated shape._
+
 
 ## goals first version
 - setup cobra cli **DONE**
-- basic commands:
-    -- 'detect' to print the content of the file.
-    -- 'normalize' to output a normalized file (csv format)
-    -- 'validate' to output a report (log, problems)
-- basic flags:
-    -- 'delimeter' set custom delimeter.
-    -- 'date-format' set custom date format.
-    -- 'out'
-    -- 'strict' stop run on first error and collect all log data.
-- define standard config/schema
-- define normalization rules
-- define validation rules
+- basic commands: <br>
+    -- 'detect' to print the content of the file.<br>
+    -- 'normalize' to output a normalized file (csv format)<br>
+    -- 'validate' to output a report (log, problems)<br>
+- basic flags:<br>
+    -- 'delimeter' set custom delimeter.<br>
+    -- 'date-format' set custom date format.<br>
+    -- 'out'<br>
+    -- 'strict' stop run on first error and collect all log data.<br>
+- define standard config/schema<br>
+- define normalization rules<br>
+- define validation rules<br>
