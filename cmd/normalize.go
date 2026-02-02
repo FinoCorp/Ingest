@@ -50,27 +50,35 @@ func init() {
 }
 
 func process_data(cmd *cobra.Command, args []string) error {
+	validated_headers := make(map[string]int)
+	
 	if len(args) == 0 {
 		return errors.New("<file> argument missing.")
-	} else {
-		records, err := get_data_from_input(args[0])
-		if err != nil {
-			return err
-		} else {
-			if len(records) > 0 {
-				if len(records[0]) > 0 {
-					headers := records[0]
-					if validate_header(headers) == nil {
-						fmt.Println(headers)
-					}
-				} else {
-					return errors.New("<file> has no headers row.")
-				}
-			} else {
-				return errors.New("<file> provided is empty or has no content.")
-			}
-		}
 	}
+
+	records, err := get_data_from_input(args[0])
+
+	if err != nil {
+		return err
+	}
+
+	if len(records) == 0 {
+		return errors.New("<file> provided is empty.")
+	}
+
+	if len(records[0]) == 0 {
+		return errors.New("<file> has no header row.")
+	}
+
+	headers := records[0] // header should always be first index of the csv data
+
+	validated_headers, err = validate_header(headers)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(validated_headers)
 
 	return nil
 }
@@ -116,11 +124,9 @@ func validate_header(csv_records []string) (map[string]int, error) {
 		cr = strings.TrimSpace(cr)
 		cr = strings.ToLower(cr)
 
-		header, found := header_check_map[cr]
-		if found {
-			fmt.Println("Header found: ", header)
-		} else {
-			fmt.Println("Header not found: ", header)
+		_, found := header_check_map[cr]
+		if !found {
+			return nil, errors.New("Headers were not found in the CSV file")
 		}
 	}
 
