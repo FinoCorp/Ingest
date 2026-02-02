@@ -4,6 +4,7 @@ _cli application to turn messy input into a known, validated shape._
 
 ## goals first version
 - setup cobra cli **DONE**
+- 
 - basic commands: <br>
     -- 'detect' to print the content of the file.<br>
     -- 'normalize' to output a normalized file (csv format)<br>
