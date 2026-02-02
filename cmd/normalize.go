@@ -100,7 +100,7 @@ func get_data_from_input(path string) ([][]string, error ){
 
 func validate_header(csv_records []string) (map[string]int, error) {
 	if len(csv_records) == 0 {
-		return errors.New("Header row cannot be empty")
+		return nil, errors.New("Header row cannot be empty")
 	}
 	
 	header_check_map := make(map[string]int)
@@ -118,11 +118,11 @@ func validate_header(csv_records []string) (map[string]int, error) {
 
 		header, found := header_check_map[cr]
 		if found {
-			fmt.Println("Header found: ", heade
+			fmt.Println("Header found: ", header)
 		} else {
 			fmt.Println("Header not found: ", header)
 		}
 	}
 
-	return nil	
+	return header_check_map, nil
 }
