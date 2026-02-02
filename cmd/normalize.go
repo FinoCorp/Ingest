@@ -5,10 +5,10 @@ package cmd
 
 import (
 	"encoding/csv"
-	"fmt"
-	"strings"
-	"os"
 	"errors"
+	"fmt"
+	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -23,6 +23,8 @@ Arguments:
 
 The command reads the input file, applies normalization rules to each row, and outputs
 the normalized data in CSV format.`
+
+var correct_headers = []string{"date", "amount", "description"}
 
 // normalizeCmd is the command for normalizing the values of the input file.
 var normalizeCmd = &cobra.Command{
@@ -61,6 +63,8 @@ func process_data(cmd *cobra.Command, args []string) error {
 					if validate_header(headers) == nil {
 						fmt.Println(headers)
 					}
+				} else {
+					return errors.New("<file> has no headers row.")
 				}
 			} else {
 				return errors.New("<file> provided is empty or has no content.")
@@ -94,14 +98,31 @@ func get_data_from_input(path string) ([][]string, error ){
 	return csv_data, nil
 }
 
-func validate_header(csv_records []string) error {
+func validate_header(csv_records []string) (map[string]int, error) {
 	if len(csv_records) == 0 {
 		return errors.New("Header row cannot be empty")
 	}
 	
-//	for i, s := range csv_records {
-//		strings.Contains("date", s)
-//	}
+	header_check_map := make(map[string]int)
+
+	for i, value := range csv_records {
+		value = strings.TrimSpace(value)
+		value = strings.ToLower(value)
+
+		header_check_map[value] = i
+	}
+
+	for _, cr := range correct_headers {
+		cr = strings.TrimSpace(cr)
+		cr = strings.ToLower(cr)
+
+		header, found := header_check_map[cr]
+		if found {
+			fmt.Println("Header found: ", heade
+		} else {
+			fmt.Println("Header not found: ", header)
+		}
+	}
 
 	return nil	
 }
