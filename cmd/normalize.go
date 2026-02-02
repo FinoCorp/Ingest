@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 	"os"
+	"errors"
 
 	"github.com/spf13/cobra"
 )
@@ -48,16 +49,21 @@ func init() {
 
 func process_data(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		fmt.Println("<file> argument missing. See usage with the '--help' flag")
+		return errors.New("<file> argument missing.")
 	} else {
 		records, err := get_data_from_input(args[0])
 		if err != nil {
 			return err
 		} else {
-			data_ok := validate_header(records)
-
-			if data_ok == true {
-				fmt.Println(records)
+			if len(records) > 0 {
+				if len(records[0]) > 0 {
+					headers := records[0]
+					if validate_header(headers) == nil {
+						fmt.Println(headers)
+					}
+				}
+			} else {
+				return errors.New("<file> provided is empty or has no content.")
 			}
 		}
 	}
@@ -67,6 +73,10 @@ func process_data(cmd *cobra.Command, args []string) error {
 
 func get_data_from_input(path string) ([][]string, error ){
 	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
 	data, err := os.ReadFile(file.Name())
 
 	if err != nil {
@@ -84,15 +94,14 @@ func get_data_from_input(path string) ([][]string, error ){
 	return csv_data, nil
 }
 
-func validate_header(csv_records [][]string) bool {
-	for i, headers := range csv_records {
-		if i == 0 {
-			//fmt.Println("Headers ROW")
-			if len(headers) == 0 {
-				return false
-			} 
-		}
+func validate_header(csv_records []string) error {
+	if len(csv_records) == 0 {
+		return errors.New("Header row cannot be empty")
 	}
+	
+//	for i, s := range csv_records {
+//		strings.Contains("date", s)
+//	}
 
-	return true
+	return nil	
 }
