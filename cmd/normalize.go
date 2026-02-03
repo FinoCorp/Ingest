@@ -13,9 +13,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var short_description = "Normalize a file with a fixed set of rules"
+var normalizeShort = "Normalize a file with a fixed set of rules."
 
-var long_description = `The normalize command takes a CSV input file and transforms its raw data into a
+var normalizeLong = `The normalize command takes a CSV input file and transforms its raw data into a
 clean, predictable format using a fixed set of normalization rules.
 
 Arguments:
@@ -26,13 +26,12 @@ the normalized data in CSV format.`
 
 var correct_headers = []string{"date", "amount", "description"}
 
-// normalizeCmd is the command for normalizing the values of the input file.
 var normalizeCmd = &cobra.Command{
 	Use:   "normalize <arguments>",
-	Short: short_description,
-	Long: long_description,
+	Short: normalizeShort,
+	Long: normalizeLong,
 	Args: cobra.MaximumNArgs(1),
-	RunE: process_data,
+	RunE: normalizeFunc,
 }
 
 func init() {
@@ -49,14 +48,14 @@ func init() {
 	// normalizeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func process_data(cmd *cobra.Command, args []string) error {
+func normalizeFunc(cmd *cobra.Command, args []string) error {
 	validated_headers := make(map[string]int)
 	
 	if len(args) == 0 {
 		return errors.New("<file> argument missing.")
 	}
 
-	records, err := get_data_from_input(args[0])
+	records, err := getDataFromInput(args[0])
 
 	if err != nil {
 		return err
@@ -72,7 +71,7 @@ func process_data(cmd *cobra.Command, args []string) error {
 
 	headers := records[0] // header should always be first index of the csv data
 
-	validated_headers, err = validate_header(headers)
+	validated_headers, err = validateHeader(headers)
 
 	if err != nil {
 		return err
@@ -83,7 +82,7 @@ func process_data(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func get_data_from_input(path string) ([][]string, error ){
+func getDataFromInput(path string) ([][]string, error ){
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -106,7 +105,7 @@ func get_data_from_input(path string) ([][]string, error ){
 	return csv_data, nil
 }
 
-func validate_header(csv_records []string) (map[string]int, error) {
+func validateHeader(csv_records []string) (map[string]int, error) {
 	if len(csv_records) == 0 {
 		return nil, errors.New("Header row cannot be empty")
 	}
@@ -131,4 +130,8 @@ func validate_header(csv_records []string) (map[string]int, error) {
 	}
 
 	return header_check_map, nil
+}
+
+func validateData(csv_records []string) (map[string]int, error) {
+	return nil, nil
 }
