@@ -1,19 +1,11 @@
 # Ingest-CLI
-_cli application to turn messy input into a known, validated shape._
+_Command-line tool for data processing._
 
-
-## goals first version
+## goals v0.1
 - setup cobra cli **DONE**
-- 
 - basic commands: <br>
-    -- 'detect' to print the content of the file.<br>
-    -- 'normalize' to output a normalized file (csv format)<br>
-    -- 'validate' to output a report (log, problems)<br>
-- basic flags:<br>
-    -- 'delimeter' set custom delimeter.<br>
-    -- 'date-format' set custom date format.<br>
-    -- 'out'<br>
-    -- 'strict' stop run on first error and collect all log data.<br>
-- define standard config/schema<br>
-- define normalization rules<br>
-- define validation rules<br>
+    -- 'merge' to merge all the files from a folder into one master file. _**DONE (csv and xlsx)**_<br>
+    -- 'normalize' to clean the raw data from a csv file _**WIP**_<br>
+
+## license
+Ingest-CLI is licensed under the *MPL 2.0* license. Read the [LICENSE](https://github.com/FinoCorp/Ingest-CLI/blob/master/LICENSE) file for more information.

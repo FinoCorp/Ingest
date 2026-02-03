@@ -1,6 +1,17 @@
-/*
-Copyright © 2026 FinoCorp (FinochioMatias)
-*/
+/**********************************************************************************************
+*
+*   IngestCLI - Command-line tool for data processing.
+*   LICENSE:
+*       Mozilla Public License 2.0
+*
+*   Copyright © 2026 FinoCorp
+*
+*   This Source Code Form is subject to the terms of the Mozilla Public
+*   License, v. 2.0. If a copy of the MPL was not distributed with this
+*   file, You can obtain one at https://mozilla.org/MPL/2.0/.
+*
+**********************************************************************************************/
+
 package cmd
 
 import (
@@ -163,29 +174,6 @@ func mergeFunc(cmd *cobra.Command, args []string) error {
 
 	fmt.Printf("Merged %d file(s) into %s\n", len(files), outPath)
 	return nil
-}
-
-func listXLSXFiles(folder string) ([]string, error) {
-	entries, err := os.ReadDir(folder)
-	if err != nil {
-		return nil, err
-	}
-
-	paths := make([]string, 0)
-	for _, e := range entries {
-		if e.IsDir() {
-			continue
-		}
-
-		name := e.Name()
-
-		if strings.HasSuffix(strings.ToLower(name), ".xlsx") {
-			paths = append(paths, filepath.Join(folder, name))
-		}
-	}
-
-	sort.Strings(paths)
-	return paths, nil
 }
 
 func listFilesByExt(folder string, ext string) ([]string, error) {
